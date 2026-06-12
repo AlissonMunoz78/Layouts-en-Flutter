@@ -20,13 +20,18 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F3F3),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImagenConStack(context),
-            _buildInformacion(context),
-          ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImagenConStack(context),
+                _buildInformacion(context),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -83,8 +88,7 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
             top: 50,
             left: 16,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 color: const Color(0xFFCC0C39),
                 borderRadius: BorderRadius.circular(4),
@@ -181,8 +185,7 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: kAmazonNaranja,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 18, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -204,13 +207,11 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
         children: [
           // Categoría
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: kAmazonNaranja.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(
-                  color: kAmazonNaranja.withValues(alpha: 0.4)),
+              border: Border.all(color: kAmazonNaranja.withValues(alpha: 0.4)),
             ),
             child: Text(
               widget.producto.categoria,
