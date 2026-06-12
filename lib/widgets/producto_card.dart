@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../models/producto.dart';
 import '../screens/producto_detalle_screen.dart';
 
+const Color kAmazonAzul = Color(0xFF232F3E);
+const Color kAmazonNaranja = Color(0xFFFF9900);
+
 class ProductoCard extends StatelessWidget {
   final Producto producto;
 
-  const ProductoCard({
-    super.key,
-    required this.producto,
-  });
+  const ProductoCard({super.key, required this.producto});
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +24,12 @@ class ProductoCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.2),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -38,27 +38,35 @@ class ProductoCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Imagen
                 Expanded(
                   flex: 3,
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(16),
-                      ),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(8),
                     ),
-                    child: Icon(
-                      _getIcono(producto.imagenUrl),
-                      size: 60,
-                      color: Colors.grey[600],
+                    child: Image.asset(
+                      producto.imagenUrl,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[100],
+                          child: Icon(
+                            Icons.image_not_supported,
+                            size: 40,
+                            color: Colors.grey[400],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
+                // Info
                 Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,41 +75,56 @@ class ProductoCard extends StatelessWidget {
                           producto.nombre,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            fontSize: 13,
+                            color: Color(0xFF0F1111),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text(
-                          producto.descripcion,
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 12,
+                        // Estrellas decorativas
+                        Row(
+                          children: List.generate(
+                            5,
+                            (i) => Icon(
+                              i < 4 ? Icons.star : Icons.star_half,
+                              size: 13,
+                              color: kAmazonNaranja,
+                            ),
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              '\$${producto.precio.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.green,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '\$${producto.precio.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color(0xFFB12704),
+                                  ),
+                                ),
+                                const Text(
+                                  'Envío gratis',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Color(0xFF007600),
+                                  ),
+                                ),
+                              ],
                             ),
                             Container(
-                              padding: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(8),
+                                color: kAmazonNaranja,
+                                borderRadius: BorderRadius.circular(6),
                               ),
                               child: const Icon(
                                 Icons.add_shopping_cart,
                                 color: Colors.white,
-                                size: 18,
+                                size: 16,
                               ),
                             ),
                           ],
@@ -112,20 +135,22 @@ class ProductoCard extends StatelessWidget {
                 ),
               ],
             ),
+            // Badge NUEVO
             Positioned(
               top: 8,
-              right: 8,
+              left: 8,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(12),
+                  color: kAmazonAzul,
+                  borderRadius: BorderRadius.circular(4),
                 ),
                 child: const Text(
                   'NUEVO',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: 9,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -135,24 +160,5 @@ class ProductoCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  IconData _getIcono(String tipo) {
-    switch (tipo) {
-      case 'laptop':
-        return Icons.laptop;
-      case 'headphones':
-        return Icons.headphones;
-      case 'watch':
-        return Icons.watch;
-      case 'camera':
-        return Icons.camera_alt;
-      case 'keyboard':
-        return Icons.keyboard;
-      case 'mouse':
-        return Icons.mouse;
-      default:
-        return Icons.shopping_bag;
-    }
   }
 }

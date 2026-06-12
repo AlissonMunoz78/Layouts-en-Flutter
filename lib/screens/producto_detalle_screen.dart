@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/producto.dart';
 
+const Color kAmazonAzul = Color(0xFF232F3E);
+const Color kAmazonNaranja = Color(0xFFFF9900);
+
 class ProductoDetalleScreen extends StatefulWidget {
   final Producto producto;
 
@@ -16,13 +19,13 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFFF3F3F3),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildImagenConStack(context),
-            _buildInformacion(),
+            _buildInformacion(context),
           ],
         ),
       ),
@@ -35,40 +38,69 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
       width: double.infinity,
       child: Stack(
         children: [
-          // Fondo de imagen
-          Container(
+          // Imagen de fondo
+          SizedBox(
             height: 350,
             width: double.infinity,
-            color: Colors.grey[200],
-            child: Icon(
-              _getIcono(widget.producto.imagenUrl),
-              size: 140,
-              color: Colors.grey[500],
+            child: Image.asset(
+              widget.producto.imagenUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: Colors.grey[200],
+                  child: Icon(
+                    Icons.image_not_supported,
+                    size: 80,
+                    color: Colors.grey[400],
+                  ),
+                );
+              },
             ),
           ),
 
-          // Badge de descuento - esquina superior izquierda
+          // Degradado inferior sobre la imagen
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 80,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.5),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Badge descuento - esquina superior izquierda
           Positioned(
             top: 50,
             left: 16,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(20),
+                color: const Color(0xFFCC0C39),
+                borderRadius: BorderRadius.circular(4),
               ),
               child: const Text(
                 '20% OFF',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 13,
+                  fontSize: 12,
                 ),
               ),
             ),
           ),
 
-          // Botón volver atrás - esquina superior izquierda (debajo del badge)
+          // Botón volver
           Positioned(
             top: 90,
             left: 16,
@@ -78,20 +110,24 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 8,
+                      blurRadius: 6,
                     ),
                   ],
                 ),
-                child: const Icon(Icons.arrow_back, color: Colors.black),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: kAmazonAzul,
+                  size: 20,
+                ),
               ),
             ),
           ),
 
-          // Ícono de favorito - esquina superior derecha
+          // Ícono favorito - esquina superior derecha
           Positioned(
             top: 50,
             right: 16,
@@ -109,20 +145,20 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 8,
+                      blurRadius: 6,
                     ),
                   ],
                 ),
                 child: Icon(
                   _esFavorito ? Icons.favorite : Icons.favorite_border,
-                  color: _esFavorito ? Colors.red : Colors.grey,
-                  size: 24,
+                  color: _esFavorito ? const Color(0xFFCC0C39) : Colors.grey,
+                  size: 22,
                 ),
               ),
             ),
           ),
 
-          // Botón flotante "Agregar al carrito" - esquina inferior derecha
+          // Botón agregar al carrito flotante
           Positioned(
             bottom: 16,
             right: 16,
@@ -130,21 +166,27 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('${widget.producto.nombre} agregado al carrito'),
+                    content: Text(
+                        '${widget.producto.nombre} agregado al carrito'),
+                    backgroundColor: kAmazonAzul,
                     duration: const Duration(seconds: 2),
                   ),
                 );
               },
-              icon: const Icon(Icons.add_shopping_cart),
-              label: const Text('Agregar al carrito'),
+              icon: const Icon(Icons.add_shopping_cart, size: 18),
+              label: const Text(
+                'Agregar al carrito',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: kAmazonNaranja,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 18, vertical: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                elevation: 6,
+                elevation: 4,
               ),
             ),
           ),
@@ -153,22 +195,30 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
     );
   }
 
-  Widget _buildInformacion() {
-    return Padding(
+  Widget _buildInformacion(BuildContext context) {
+    return Container(
+      color: Colors.white,
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Categoría
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.blue[50],
-              borderRadius: BorderRadius.circular(20),
+              color: kAmazonNaranja.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(
+                  color: kAmazonNaranja.withValues(alpha: 0.4)),
             ),
             child: Text(
               widget.producto.categoria,
-              style: TextStyle(color: Colors.blue[700], fontSize: 13),
+              style: const TextStyle(
+                color: kAmazonAzul,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -177,83 +227,152 @@ class _ProductoDetalleScreenState extends State<ProductoDetalleScreen> {
           Text(
             widget.producto.nombre,
             style: const TextStyle(
-              fontSize: 26,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
+              color: Color(0xFF0F1111),
             ),
           ),
           const SizedBox(height: 8),
 
+          // Estrellas
+          Row(
+            children: [
+              ...List.generate(
+                5,
+                (i) => Icon(
+                  i < 4 ? Icons.star : Icons.star_half,
+                  size: 18,
+                  color: kAmazonNaranja,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                '4.5 (128 reseñas)',
+                style: TextStyle(
+                  color: Color(0xFF007185),
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          const Divider(),
+
           // Precio
-          Text(
-            '\$${widget.producto.precio.toStringAsFixed(2)}',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const Text(
+                'Precio: ',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              Text(
+                '\$${widget.producto.precio.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFB12704),
+                ),
+              ),
+            ],
+          ),
+          const Text(
+            '✓ Envío gratis con Prime',
+            style: TextStyle(
+              color: Color(0xFF007600),
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 16),
 
+          const Divider(),
+
           // Descripción
           const Text(
-            'Descripción',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            'Sobre este producto',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF0F1111),
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             widget.producto.descripcion,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey[700],
-              height: 1.5,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Color(0xFF565959),
+              height: 1.6,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
 
-          // Botón de compra adicional
+          // Botón comprar ahora
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('¡Compra realizada!')),
+                  const SnackBar(
+                    content: Text('¡Compra realizada con éxito!'),
+                    backgroundColor: Color(0xFF007600),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: kAmazonNaranja,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                elevation: 2,
               ),
               child: const Text(
                 'Comprar ahora',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Botón agregar al carrito secundario
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        '${widget.producto.nombre} agregado al carrito'),
+                    backgroundColor: kAmazonAzul,
+                  ),
+                );
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: kAmazonAzul,
+                side: const BorderSide(color: kAmazonAzul),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Agregar al carrito',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  IconData _getIcono(String tipo) {
-    switch (tipo) {
-      case 'laptop':
-        return Icons.laptop;
-      case 'headphones':
-        return Icons.headphones;
-      case 'watch':
-        return Icons.watch;
-      case 'camera':
-        return Icons.camera_alt;
-      case 'keyboard':
-        return Icons.keyboard;
-      case 'mouse':
-        return Icons.mouse;
-      default:
-        return Icons.shopping_bag;
-    }
   }
 }

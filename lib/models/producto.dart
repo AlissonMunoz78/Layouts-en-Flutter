@@ -16,54 +16,53 @@ class Producto {
   });
 }
 
-// Datos de ejemplo 
 List<Producto> productosEjemplo = [
   Producto(
     id: '1',
     nombre: 'Laptop Pro',
-    descripcion: 'Laptop de alto rendimiento',
+    descripcion: 'Laptop de alto rendimiento con procesador de última generación',
     precio: 1299.99,
-    imagenUrl: 'laptop',
+    imagenUrl: 'assets/images/laptop.jpg',
     categoria: 'Electrónica',
   ),
   Producto(
     id: '2',
     nombre: 'Auriculares BT',
-    descripcion: 'Auriculares inalámbricos',
+    descripcion: 'Auriculares inalámbricos con cancelación de ruido',
     precio: 89.99,
-    imagenUrl: 'headphones',
+    imagenUrl: 'assets/images/headphones.jpg',
     categoria: 'Electrónica',
   ),
   Producto(
     id: '3',
     nombre: 'Smartwatch',
-    descripcion: 'Reloj inteligente deportivo',
+    descripcion: 'Reloj inteligente deportivo con GPS integrado',
     precio: 249.99,
-    imagenUrl: 'watch',
+    imagenUrl: 'assets/images/smartwatch.jpg',
     categoria: 'Electrónica',
   ),
   Producto(
     id: '4',
     nombre: 'Cámara Digital',
-    descripcion: 'Cámara profesional 4K',
+    descripcion: 'Cámara profesional 4K con lente intercambiable',
     precio: 599.99,
-    imagenUrl: 'camera',
+    imagenUrl: 'assets/images/camera.jpg',
     categoria: 'Fotografía',
   ),
   Producto(
     id: '5',
     nombre: 'Teclado Mecánico',
-    descripcion: 'Teclado gaming RGB',
+    descripcion: 'Teclado gaming RGB con switches mecánicos',
     precio: 129.99,
-    imagenUrl: 'keyboard',
+    imagenUrl: 'assets/images/keyboard.jpg',
     categoria: 'Accesorios',
   ),
   Producto(
     id: '6',
     nombre: 'Mouse Inalámbrico',
-    descripcion: 'Mouse ergonómico',
+    descripcion: 'Mouse ergonómico con sensor de alta precisión',
     precio: 49.99,
-    imagenUrl: 'mouse',
+    imagenUrl: 'assets/images/mouse.jpg',
     categoria: 'Accesorios',
   ),
 ];

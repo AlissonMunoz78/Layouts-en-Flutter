@@ -14,7 +14,7 @@ class MiApp extends StatelessWidget {
       title: 'Catálogo de Productos',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF232F3E)),
         useMaterial3: true,
       ),
       home: const HomeScreen(),
